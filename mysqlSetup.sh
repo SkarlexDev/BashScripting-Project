@@ -27,7 +27,7 @@ mysql -e "SELECT User, Host FROM mysql.user;"
 echo "Installing awscli..."
 sudo apt-get install awscli -y
 
-#echo "Creating cronjob to run every hour"
+echo "Creating cronjob to run every hour"
 
-#cat <(crontab -l) <(echo "*/1 * * * * su ubuntu -c /etc/scripts/backup.sh") | crontab -
-#crontab -l
+cat <(crontab -l) <(echo "*/1 * * * * /etc/scripts/backup.sh") | crontab -
+crontab -l

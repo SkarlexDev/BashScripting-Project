@@ -2,24 +2,24 @@
 echo "starting db backup"
 date=$(date '+%Y-%m-%d')
 hour=$(date '+%T')
-
-if ! [ -d "backup" ]
+path="/etc/scripts"
+if ! [ -d "$path/backup" ]
 then
-        sudo mkdir -m777 backup
+        sudo mkdir -m777 $path/backup
 fi
-dbbackup="backup/mydb${date}${hour}.sql"
+dbbackup="$path/backup/mydb${date}${hour}.sql"
 
-sudo mysqldump -u admin -p verticalDB --no-tablespaces > ${dbbackup}
+sudo mysqldump -u admin -p1234 verticalDB --no-tablespaces > ${dbbackup}
 echo "db backup complete"
 dumpsize=$(stat -c%s "$dbbackup")
 
-if [ -e history.csv ]
+if [ -e $path/history.csv ]
 then
         #printf '%s\n' $date $hour ${dumpsize} bytes | paste -sd ',' >> history.csv
-        sudo sh -c "echo '$date','$hour','${dumpsize}' bytes >> history.csv"
+        sudo sh -c "echo '$date','$hour','${dumpsize}' bytes >> $path/history.csv"
 else
-        sudo sh -c "echo DATA,ORA,DumpSize >> history.csv"
-        sudo sh -c "echo '$date','$hour','${dumpsize}' bytes >> history.csv"
+        sudo sh -c "echo DATA,ORA,DumpSize >> path/history.csv"
+        sudo sh -c "echo '$date','$hour','${dumpsize}' bytes >> $path/history.csv"
         #printf '%s\n' DATA ORA DumpSize | paste -sd ',' >> history.csv
         #printf '%s\n' $date $hour ${dumpsize} bytes | paste -sd ',' >> history.csv
 fi
