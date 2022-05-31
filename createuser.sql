@@ -1,0 +1,3 @@
+CREATE USER admin@localhost IDENTIFIED BY '1234';
+GRANT ALL PRIVILEGES ON verticalDB.* TO 'admin'@'localhost';
+FLUSH PRIVILEGES;

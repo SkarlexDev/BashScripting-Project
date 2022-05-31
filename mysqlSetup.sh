@@ -11,20 +11,23 @@ echo "#######################################"
 MYSQLSERVICE=`systemctl is-active mysql`
 echo "Mysql service is: $MYSQLSERVICE"
 echo "#######################################"
+mysql < createDB.sql
+
 if [ $(echo "SELECT COUNT(*) FROM mysql.user WHERE user = 'admin'" | mysql | tail -n1) -gt 0 ]
 then
-echo "User exists"
+        echo "User exists"
 else
-echo "Creating new user"
-mysql -e "CREATE USER 'admin'@'localhost' IDENTIFIED BY '1234';"
+        echo "Creating new user"
+        mysql < createuser.sql
 fi
-mysql -e "SELECT User, Host FROM mysql.user;"
-mysql < createDB.sql
+
 echo "#######################################"
 mysql -e "show databases;use $DB; show tables;"
+mysql -e "SELECT User, Host FROM mysql.user;"
 echo "Installing awscli..."
 sudo apt-get install awscli -y
 
-echo "Creating cronjob to run every hour"
-cat <(crontab -l) <(echo "0 * * * * /etc/scripts/backup.sh") | crontab -
-crontab -l
+#echo "Creating cronjob to run every hour"
+
+#cat <(crontab -l) <(echo "*/1 * * * * su ubuntu -c /etc/scripts/backup.sh") | crontab -
+#crontab -l
